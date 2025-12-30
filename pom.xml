@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.jaspeen</groupId>
+    <groupId>co.humand.io.github.jaspeen</groupId>
     <artifactId>ulid-java</artifactId>
     <version>0.2.1-hu</version>
     <packaging>jar</packaging>
 
     <name>ulid-java</name>
     <description>ULID java implementation</description>
-    <url>https://github.com/jaspeen/ulid-java</url>
+    <url>ttps://github.com/HumandDev/ulid-java</url>
     <inceptionYear>2023</inceptionYear>
 
     <licenses>
@@ -22,8 +22,8 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:ssh://git@github.com:HumandDev/humand-marty.git</connection>
-        <url>https://github.com/HumandDev/humand-marty</url>
+        <connection>scm:git:ssh://git@github.com:HumandDev/ulid-java.git</connection>
+        <url>https://github.com/HumandDev/ulid-java</url>
     </scm>
 
     <distributionManagement>
