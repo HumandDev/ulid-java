@@ -14,7 +14,7 @@ class MonotonicULIDTest {
         ULID u1 = u.next();
         ULID u2 = u.next();
 
-        assertEquals(u1.compareTo(u2), -1);
+        assertEquals(-1, u1.compareTo(u2));
     }
 
     @Test
@@ -22,6 +22,6 @@ class MonotonicULIDTest {
         ULID u1 = MonotonicULID.random();
         ULID u2 = MonotonicULID.random();
 
-        assertEquals(u1.compareTo(u2), -1);
+        assertEquals(-1, u1.compareTo(u2));
     }
 }
