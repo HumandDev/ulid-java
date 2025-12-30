@@ -32,7 +32,7 @@ dependencies {
 
 ### ULID generation
 ```java
-ULID ulid = ULID.random();
+ULID ulid = ULID.randomV7();
 String crockfordBase32 = ulid.toString();
 byte[] binary = ulid.toBytes();
 ```
@@ -47,7 +47,7 @@ assertEquals(parsedFromString, parsedFromBytes);
 
 ### UUID compatibility
 ```java
-ULID.random().toUUID();
+ULID.randomV7().toUUID();
 ULID.fromUUID(UUID.randomUUID());
 ```
 

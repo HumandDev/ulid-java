@@ -62,7 +62,7 @@ public class ULIDIdGenerator implements IdentifierGenerator {
         if (id != null) {
             return id;
         }
-        ULID val = ULID.random();
+        ULID val = ULID.randomV7();
         return valueTransformer.transform(val);
     }
 }

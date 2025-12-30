@@ -279,10 +279,24 @@ public class ULID implements Serializable, Comparable<ULID>{
 
     /**
      * Generates random ULID
+     *
+     * @deprecated Use {@link #randomV7()} instead
      */
+    @Deprecated
     public static ULID random() {
         return random(ThreadLocalRandom.current());
     }
+
+    public static ULID randomV7() {
+        return randomV7(ThreadLocalRandom.current());
+    }
+
+    public static ULID randomV7(Random random) {
+        byte[] entropy = new byte[ENTROPY_LENGTH];
+        random.nextBytes(entropy);
+        return noCheckGenerateV7(System.currentTimeMillis(), entropy);
+    }
+
 
     /**
      * Generates random ULID with custom random generator
@@ -291,7 +305,10 @@ public class ULID implements Serializable, Comparable<ULID>{
      * <pre>
      *     ULID.random(ThreadLocalRandom.current());
      * </pre>
+     *
+     * @deprecated Use {@link #randomV7(Random)} instead
      */
+    @Deprecated
     public static ULID random(Random random) {
         byte[] entropy = new byte[ENTROPY_LENGTH];
         random.nextBytes(entropy);
@@ -302,6 +319,8 @@ public class ULID implements Serializable, Comparable<ULID>{
      * Generates ULID from raw timestamp and entropy
      * @param time 48-bit timestamp
      * @param entropy 80-bit random data
+     *
+     * @deprecated Use {@link #generateV7(long, byte[])} instead
      */
     public static ULID generate(long time, byte[] entropy) {
         if (time < MIN_TIME || time > MAX_TIME) {
@@ -312,10 +331,36 @@ public class ULID implements Serializable, Comparable<ULID>{
         }
         return noCheckGenerate(time, entropy);
     }
+
+    /**
+     * Generates ULID from raw timestamp and entropy
+     * @param time 48-bit timestamp
+     * @param entropy 80-bit random data
+     */
+    public static ULID generateV7(long time, byte[] entropy) {
+        if (time < MIN_TIME || time > MAX_TIME) {
+            throw new IllegalArgumentException("Invalid timestamp");
+        }
+        if (entropy == null || entropy.length != 10) {
+            throw new IllegalArgumentException("Invalid entropy");
+        }
+        return noCheckGenerateV7(time, entropy);
+    }
+
+    private static ULID noCheckGenerateV7(long time, byte[] entropy) {
+        long msb = (generateMsb(time, entropy) & ~0xF000L) | 0x7000L;
+        long lsb = (bytesToLong(entropy, 2) & 0x3fffffffffffffffL) | 0x8000000000000000L;
+        return new ULID(msb, lsb);
+    }
+
     private static ULID noCheckGenerate(long time, byte[] entropy) {
-        long msb = time << 16 | ((entropy[0] & 0xff) << 8) | (entropy[1] & 0xff);
+        long msb = generateMsb(time, entropy);
         long lsb = bytesToLong(entropy, 2);
         return new ULID(msb, lsb);
+    }
+
+    private static long generateMsb(long time, byte[] entropy) {
+        return time << 16 | ((entropy[0] & 0xff) << 8) | (entropy[1] & 0xff);
     }
 
     private static byte valOrFail(char c) {

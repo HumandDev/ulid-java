@@ -1,5 +1,6 @@
 package io.github.jaspeen.ulid;
 
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -87,25 +88,15 @@ class ULIDTest {
 
     @Test
     void fromStringInvalidLength() {
-        assertThrows(NullPointerException.class, () ->{
-            ULID.fromString(null);
-        });
-        assertThrows(IllegalArgumentException.class, () ->{
-            ULID.fromString("");
-        });
-        assertThrows(IllegalArgumentException.class, () ->{
-            ULID.fromString("0123456789012345678901234");
-        });
-        assertThrows(IllegalArgumentException.class, () ->{
-            ULID.fromString("012345678901234567890123456");
-        });
+        assertThrows(NullPointerException.class, () -> ULID.fromString(null));
+        assertThrows(IllegalArgumentException.class, () -> ULID.fromString(""));
+        assertThrows(IllegalArgumentException.class, () -> ULID.fromString("0123456789012345678901234"));
+        assertThrows(IllegalArgumentException.class, () -> ULID.fromString("012345678901234567890123456"));
     }
 
     @Test
     void fromStringInvalidChars() {
-        assertThrows(IllegalArgumentException.class, () ->{
-            ULID.fromString("uU:!;,[]()%$@`~&*(+_<>/:'{");
-        });
+        assertThrows(IllegalArgumentException.class, () -> ULID.fromString("uU:!;,[]()%$@`~&*(+_<>/:'{"));
     }
 
     @ParameterizedTest(name = "{0}")
@@ -120,19 +111,10 @@ class ULIDTest {
 
     @Test
     void fromBytesInvalid() {
-        assertThrows(NullPointerException.class, () ->{
-            ULID.fromBytes(null);
-        });
-
-        assertThrows(IllegalArgumentException.class, () ->{
-            ULID.fromBytes(new byte[0]);
-        });
-        assertThrows(IllegalArgumentException.class, () ->{
-            ULID.fromBytes(new byte[15]);
-        });
-        assertThrows(IllegalArgumentException.class, () ->{
-            ULID.fromBytes(new byte[17]);
-        });
+        assertThrows(NullPointerException.class, () -> ULID.fromBytes(null));
+        assertThrows(IllegalArgumentException.class, () -> ULID.fromBytes(new byte[0]));
+        assertThrows(IllegalArgumentException.class, () -> ULID.fromBytes(new byte[15]));
+        assertThrows(IllegalArgumentException.class, () -> ULID.fromBytes(new byte[17]));
     }
 
     @ParameterizedTest(name = "{0}")
@@ -177,10 +159,10 @@ class ULIDTest {
         ULID u2 = ULID.random();
         ULID u3 = ULID.fromString(u1.toString());
 
-        assertEquals(u1.compareTo(u2), -1);
-        assertEquals(u2.compareTo(u1), 1);
-        assertEquals(u1.compareTo(u3), 0);
-        assertEquals(u3.compareTo(u1), 0);
+        assertEquals(-1, u1.compareTo(u2));
+        assertEquals(1, u2.compareTo(u1));
+        assertEquals(0, u1.compareTo(u3));
+        assertEquals(0, u3.compareTo(u1));
     }
 
     @Test
@@ -194,28 +176,18 @@ class ULIDTest {
         assertArrayEquals(new byte[ENTROPY_LENGTH], zeroEntropyUlid.getEntropy());
     }
 
-    @Test
+    @RepeatedTest(100)
     void timestamp() {
         ULID ulid = ULID.random();
         // within 10 sec
         assertTrue(Math.abs(ulid.getTimestamp() - System.currentTimeMillis()) < 10000);
     }
 
-    /*@ParameterizedTest(name = "{0}")
-    @MethodSource("testData")
-    void testPrint(Fixture fix) {
-        System.out.println("In:   " + fix.strValue);
-        System.out.println("Par:  " + ULID.fromString(fix.strValue));
-        long msb = ULID.fromString(fix.strValue).getMsb();
-        System.out.println(msb);
-        System.out.println(msb >>> 16);
-        System.out.println(Long.toBinaryString(msb));
-        System.out.println(Long.toBinaryString(msb >>> 16));
-        System.out.println("Par1: " + ULID.fromBytes(fix.binValue));
-        System.out.println("Parz: " + Long.toBinaryString(ULID.fromBytes(fix.binValue).getMsb()) + " " + Long.toBinaryString(ULID.fromBytes(fix.binValue).getLsb()));
-        System.out.println("InB:  " + Arrays.toString(fix.binValue));
-        System.out.println("ParB: " + Arrays.toString(ULID.fromString(fix.strValue).toBytes()));
-        System.out.println("Par1B:" + Arrays.toString(ULID.fromBytes(fix.binValue).toBytes()));
-        System.out.println(ULID.fromString(fix.strValue).toUUID());
-    }*/
+    @RepeatedTest(100)
+    void uuidv7() {
+        ULID ulid = ULID.randomV7();
+        UUID uuid = ulid.toUUID();
+        assertEquals(7, uuid.version());
+        assertEquals(2, uuid.variant());
+    }
 }
