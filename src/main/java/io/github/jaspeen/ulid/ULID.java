@@ -354,7 +354,7 @@ public class ULID implements Serializable, Comparable<ULID>{
     }
 
     private static ULID noCheckGenerate(long time, byte[] entropy) {
-        long msb= generateMsb(time, entropy);
+        long msb = generateMsb(time, entropy);
         long lsb = bytesToLong(entropy, 2);
         return new ULID(msb, lsb);
     }
