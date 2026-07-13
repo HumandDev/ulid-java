@@ -7,25 +7,26 @@ Generate and parse ULIDs in Crockford base32 text and binary representations.
 
 See [ULID specification](https://github.com/ulid/spec) for more info
 
+## Humand fork
+This is the Humand fork of [jaspeen/ulid-java](https://github.com/jaspeen/ulid-java), published to Humand CodeArtifact as `co.humand.io.github.jaspeen:ulid-java`.
+
+Fork changes:
+* `ULID.randomV7()` generates UUIDv7-compatible ULIDs
+* `0.3.0-hu`+ requires Hibernate ORM 7 (new `IdentifierGenerator` APIs); Hibernate 6 users should stay on `0.2.1-hu`
+
 ## Key points
-* Java 11+
+* Java 17+
 * API similar to java.util.UUID
 * Optional monotonic generator
-* Optional hibernate type and ID generator (requires hibernate 6.x)
+* Optional hibernate type and ID generator (requires hibernate 7.x)
 ## Install
 ### Maven
 ```xml
 <dependency>
-    <groupId>io.github.jaspeen</groupId>
+    <groupId>co.humand.io.github.jaspeen</groupId>
     <artifactId>ulid-java</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0-hu</version>
 </dependency>
-```
-### Gradle
-```groovy
-dependencies {
-    implementation 'io.github.jaspeen:ulid-java:0.2.0'
-}
 ```
 
 ## Usage
